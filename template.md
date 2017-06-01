@@ -1,4 +1,4 @@
-# RV Challenge & Cheat Sheet
+# RV Challenge & Cheat Sheet (max 2 pages)
 
 ## Tool/Spec language: SomeTL
 ## Author(s): Martin Leucker & Giles Reger
