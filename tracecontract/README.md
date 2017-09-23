@@ -1,7 +1,7 @@
-# RV Challenge & Cheat Sheet (max 2 pages)
+# RV Challenge & Cheat Sheet
 
-## Tool and/or Spec language: SomeTL
-## Author(s): Martin Leucker & Giles Reger
+## Tool and Spec language: TraceContract
+## Author: Klaus Havelund 
 ## Description
 
 * My favourite specification (or two)
@@ -11,7 +11,7 @@
 
 ## References & links
 
-* some URL
+* URL: https://github.com/havelund/tracecontract
 * an attached spec & input for download if applicable
 
 ## Nice-to-haves
@@ -31,7 +31,4 @@ As *outcome* of the seminar, we hope to ideally define a small set of interestin
 ### TODOS
 
 * Use table from the STTT-paper (https://link.springer.com/article/10.1007%2Fs10009-017-0454-5) to self-categorize tool here in the template [Giles]
-* how to engage the other half of the participants that don't have specs or tools. Draft email to participants, taking the "How..."-section from above.
-* Martin/Volker: TeSSLa-spec
-* Giles: QEA-spec
-* How/where do people submit their things? Naming-scheme?
+
