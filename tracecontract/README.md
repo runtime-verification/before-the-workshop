@@ -427,13 +427,17 @@ of a programming language. This allows TraceContract to be used in realistic sce
 object-oriented and functional programming language, resulting in a very
 convenient modeling language.
 
+* It is reasonably elegant to write properties in. Using TraceContract is often a fun experience.
+
 * Since it is an API in a programming language, a programmer trained in that programming language can relatively easlily adopt it and be up and running fast.
 
 ### Cons
 
 * Since it is an API in a programming language, a user has to be a (Scala) programmer, which limits the applicability. Had it been e.g. Python this might have been less of a problem.
 
-* The DSL is a so-called *shallow DSL*, which means that Scala's language constructs are part of the DSL (in contrast a *deep DSL* where one creates an entire Abstract Syntax for the DSL in Scala). This means that there are limits to how easy it is to add certain constructs. E.g. TraceContract is not good at past time temporal properties (although a newer version has been created that to some extent tries to solve this problem). Also, it is not possible to easily analyze TraceContract programs and optimize them for speed and memory consumption. However, it is the fact that it is a shallow DSL that makes TraceContract really flexible.
+* The DSL is a so-called *shallow DSL*, which means that Scala's language constructs are part of the DSL (in contrast a *deep DSL* where one creates an entire Abstract Syntax for the DSL in Scala). This means that it is not possible to easily analyze TraceContract programs and optimize them for speed and memory consumption. 
+
+* The DSL is probably not as slick as it could be as if it was designed all from scratch without being an extension of a programming language. 
 
 ## References & links
 
