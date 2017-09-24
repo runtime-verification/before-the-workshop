@@ -1,6 +1,5 @@
-# RV Challenge & Cheat Sheet
+# TraceContract
 
-## Tool and Spec language: TraceContract
 ## Author: Klaus Havelund 
 ## Description
 
