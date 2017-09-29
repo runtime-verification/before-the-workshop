@@ -5,7 +5,7 @@ URL: http://www.dagstuhl.de/en/program/calendar/semhp/?semnr=17462
 
 # Instructions for adding a Contribution
 
-* Create a tool folder named after the tool in small letters.
+* Create a tool folder named after the tool.
 
 * Copy `template.md` into that folder.
 
