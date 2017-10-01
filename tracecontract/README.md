@@ -446,5 +446,25 @@ convenient modeling language.
 
 ## Classification
 
-* Use table from the STTT-paper (https://link.springer.com/article/10.1007%2Fs10009-017-0454-5) to self-categorize tool. Not done yet.
+* Use Table 5 from the STTT-paper (https://link.springer.com/article/10.1007%2Fs10009-017-0454-5) to self-categorize tool.
 
+|U.spec|B.spec|Prop|Par|Aut|Log|Reg|Ord|Time|Ins|AJ |C  |Java|Tra|T.trig|E.trig|
+|:-----:|:---:|:--:|:-:|:-:|:-:|:-:|:-:|:--:|:-:|:-:|:-:|:--:|:-:|:----:|:----:|
+| x     |     | x  | x | x | x |   | x |(x)|   | x |   |  x | x |      |   x  |
+
+* U.spec = User-enabled
+* B.spec = Built-in 
+* Prop = Propositional events
+* Par = Parametric events
+* Aut = Automata-based
+* Log = Logic-based
+* Reg = Regular Expressions-based
+* Ord = Logical-time
+* Time = Real-time
+* Ins = Own instrumentation
+* AJ = Relies on AspectJ
+* C  = C programs
+* Java = Java programs
+* Tra = Traces
+* T.trig = Time triggered 
+* E.trig = Event triggered
