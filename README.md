@@ -20,5 +20,5 @@ URL: http://www.dagstuhl.de/en/program/calendar/semhp/?semnr=17462
 
 # Tools and Languages
 
-[TraceContract](tracecontract/README.md)
-[QEA](qea/README.md)
+- [TraceContract](tracecontract/README.md)
+- [QEA](qea/README.md)
