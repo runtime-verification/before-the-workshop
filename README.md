@@ -14,10 +14,11 @@ URL: http://www.dagstuhl.de/en/program/calendar/semhp/?semnr=17462
 * Fill out the tool local `README.md` file. One can use a markdown
   editor which makes the experience much nicer.
 
-* Possibly add other material in that folder such as source code etc.
+* Possibly add other material in that folder such as source code, traces etc.
 
 * Make a link from the top `README.md` file to that local `README.md` file.
 
 # Tools and Languages
 
 [TraceContract](tracecontract/README.md)
+[QEA](qea/README.md)
