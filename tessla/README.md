@@ -1,10 +1,14 @@
-## TeSSLa
+## TeSSLa (under construction...)
 
 The Temporal Stream-based Specification Language (TeSSLa) operates on asynchronous real-time streams. It was first created for specifying properties about programs running on multi core systems and it is currently used and developed in the [COEMS](https://www.coems.eu) project.
 
 ## Authors: Torben Scheffel
 
 ## Application example
+
+### Finding bursts
+
+### Data race detection
 
 Data races occur in multi threaded programs when two or more threads access the same memory location concurrently, and at least one of the accesses is for writing, and the threads are not using any exclusive locks to control their accesses to that memory. C program [race.c](../dataset/data-race-trace-example-1/resource/6f5c2a2e-18d5-4bff-b857-e124c8f9470c) is an example of a race prone program. 
 
