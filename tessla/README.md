@@ -4,13 +4,101 @@ The Temporal Stream-based Specification Language (TeSSLa) operates on asynchrono
 
 ## Authors: Torben Scheffel
 
-## Application example
+In case of any questions do not hesitate to contact [Torben](http://www.isp.uni-luebeck.de/staff/scheffel).
 
-### Finding bursts
+## Example: Finding bursts
 
-### Data race detection
+TeSSLa can be seen as a stream processing language. In the following example we detect bursts of input events in a certain time frame:
 
-Data races occur in multi threaded programs when two or more threads access the same memory location concurrently, and at least one of the accesses is for writing, and the threads are not using any exclusive locks to control their accesses to that memory. C program [race.c](http://dkan.isp.uni-luebeck.de/dataset/data-race-trace-example-1/resource/6f5c2a2e-18d5-4bff-b857-e124c8f9470c) is an example of a race prone program. 
+```ruby
+in send: Events<Unit>
+in start: Events<Unit>
+in stop: Events<Unit>
+
+# Specify burst property: Up to 3 events are allows during burst length of 2 seconds.
+# During the waiting period of 1 second immediately after the burst period no event is allowed.
+def property :=
+  bursts(
+    send,
+    burstLength = 2s,
+    waitingPeriod = 1s,
+    burstAmount = 3
+  )
+
+# The communication is ready between start and stop
+def busReady := defined(start) && default(time(start), 0) > default(time(stop), 0)
+
+# If the communication bus is not ready, then no event allowed.
+# If the bus is ready, then events must follow the burst pattern defined above.
+def correct := if !busReady
+  then noEvent(send, since = falling(busReady))
+  else property
+
+# Outputs
+out busReady
+out correct
+```
+
+(Note that we only use ruby syntax highlighting, because GitHub supports it and it is syntactically close enough to TeSSLa.)
+
+You can find the full specification in [`bursts.tessla`](bursts.tessla), the input trace in [`bursts.input`](bursts.input) and the monitoring output in [`bursts.output`](bursts.output).
+
+The idea of the specification above is depicted in the following diagram:
+
+![bursts.png]
+
+The input trace contains exactly those events shown in the diagram above:
+
+```
+$timeunit = "ms"
+2000: start
+3000: send
+3500: send
+4000: send
+...
+```
+
+As declares by the `$timeunit` annotation the timestamp before the colon is in milliseconds. The event after the colon contains no data, so the name of the event is enough.
+
+The [monitoring output `bursts.output`](bursts.output) looks as follows
+
+```
+$timeunit = "ms"
+0: busReady = false
+0: correct = true
+2000: busReady = true
+2000: correct = false
+3000: correct = true
+3500: correct = true
+4000: correct = true
+...
+```
+
+TeSSLa consists of only seven basic operators and a huge macro system, which allows to write specifications as the one above. For example the macro `eventCount` is defined as follows:
+
+```ruby
+# Count the number of events on `values`. Reset the output to 0
+# on every event on `reset`.
+def eventCount(values, reset) := {
+  def count := default(
+    # `reset` contains the latest event
+    if default(time(reset) > time(values), false)
+    then 0
+    # `reset` and `values` latest event happen simultaneously
+    else if default(time(reset) == time(values), false)
+    then 1
+    # `values` contains the latest event --> increment counter
+    else last(count, values) + 1
+  , 0)
+  count
+}
+```
+
+The parts of the standard library used in the specification given above is included in the [`bursts.tessla`](bursts.tessla).
+
+## Application Example: Data race detection
+
+Data races occur in multi threaded programs when two or more threads access the same memory location concurrently, and at least one of the accesses is for writing, and the threads are not using any exclusive locks to control their accesses to that memory. The C program [`race.c`](race.c) is an example of a race prone program. 
 
 ```c
 #include <stdio.h>
@@ -44,55 +132,53 @@ int main() {
 }
 ```
 
-Here we  have two threads, both calling the functions that should count up to 100. Since there are no synchronization mechanisms between threads on the shared variable <code>x</code> a data race is present. For example, let us assume that the current value of <code>x</code> is 5. One thread may read the current value of <code>x</code>, but before this thread increments <code>x</code>, the other thread may also read the same value. Then, both threads may store 6 in <code>x</code>. Such situation happens any time both threads read the same value. So, the final value of <code>x</code> may vary in each run.
+Here we have two threads, both calling the functions that should count up to 100. Since there are no synchronization mechanisms between threads on the shared variable `x` a data race is present. For example, let us assume that the current value of `x` is 5. One thread may read the current value of `x`, but before this thread increments `x`, the other thread may also read the same value. Then, both threads may store 6 in `x`. Such situation happens any time both threads read the same value. So, the final value of `x` may vary in each run.
 
-If the file [traces.log](http://dkan.isp.uni-luebeck.de/dataset/data-race-trace/resource/df1b9c7f-c788-4560-883c-84baf34c47ce)  contains the trace of one execution of the C code, with the [TeSSLa specification](http://dkan.isp.uni-luebeck.de/dataset/data-race-trace-example-1/resource/2d5ea36e-f475-4cbf-9e21-2f6718b75856) given bellow,  we can do two things. First, we can issue an event in the <code>dataRace</code> stream when we detect that two threads are reading the shared variable and at least one of them is writing. Second, we can issue an event in <code>badInterleave</code> stream when we detect that the threads have indeed interleaved in such way that the value of the shared variable is corrupted. An event in dataRace is issued regardless of whether threads interleave correctly or not in the current execution. 
+If the file [`race.trace`](race.trace) contains the trace of one execution of the C code, with the [TeSSLa specification `race.tessla`](race.tessla) given bellow, we can do two things. First, we can issue an event in the `dataRace` stream when we detect that two threads are reading the shared variable and at least one of them is writing. Second, we can issue an event in `badInterleave` stream when we detect that the threads have indeed interleaved in such way that the value of the shared variable is corrupted. An event in dataRace is issued regardless of whether threads interleave correctly or not in the current execution. 
 
 ```ruby
-def merge(x,y) := if default(x==x, false) || default(y==y, false) then ()
+# observation specification
+def thread1_reads := load_exec(line_number = 9)
+def thread2_reads := load_exec(line_number = 16)
+def thread1_writes := store_exec(line_number = 9)
+def thread2_writes := store_exec(line_number = 16)
 
-def T1_reads_x:= if (function == "count1" && instruction == "load" && line == 9) then ()
-out T1_reads_x
+# are threads reading or writing at all?
+def one_thread_reads := thread1_reads || thread2_reads
+def two_threads_read := thread1_reads && thread2_reads
+def one_thread_writes := thread1_writes || thread2_writes
 
-def T2_reads_x:= if (function == "count2" && instruction == "load" && line == 16) then ()
-out T2_reads_x
-
-def T1_writes_x:= if (function == "count1" && instruction == "store" && line == 9) then ()
-out T1_writes_x 
-
-def T2_writes_x:= if (function == "count2" && instruction == "store" && line == 16) then ()
-out T2_writes_x
-
-def two_threads_read := T1_reads_x == () && T2_reads_x == () 
-
-def a_thread_writes := merge(T1_writes_x,T2_writes_x) == ()
-
-def dataRace := if two_threads_read && a_thread_writes then ()
+# if two threads are reading a variable which is written by one thread,
+# we found a potential data race
+def dataRace := two_threads_read && one_thread_writes
 out dataRace
 
-def time_read_x := time(merge(T1_reads_x,T2_reads_x))
+# for more concrete results look at the time stamps
+def time_read := time(one_thread_reads)
+def time_write := time(one_thread_writes)
 
-def time_write_x := time(merge(T1_writes_x,T2_writes_x))
-
-def badInterleave := if last(time_read_x,time_read_x) > default(time_write_x,0) then ()
+# if time stamp of second to last read is greater than time stamp of last write,
+# then two reads happened without a write in between --> bad interleave
+def badInterleave := if last(time_read) > default(time_write, 0) then ()
 out badInterleave
-
-
-in line: Events<Int>
-in column: Events<Int>
-in instruction: Events<String>
-in function: Events<String>
-
-def code_line_exec(l) := if line == l && last(line, line) != l then ()
-def function_call(name) := if function == name && last(function, function) != name && last(instruction, instruction) == "call" then ()
-def function_return(name) := if function == name && instruction == "ret" then ()
 ```
 
-TeSSLa provides a command line tool and a web interface which we can use to check the trace and find the data race and  interleave errors.
+The [output of the monitoring `race.output`](race.output) looks as follows
 
-![Image of Tessla tool](http://dkan.isp.uni-luebeck.de/sites/default/files/tesslaline.jpg)
-
-All the above  C program, the trace generated by the program and the TeSSLa specification are stored in our  [COEMS open data portal](http://dkan.isp.uni-luebeck.de/) as dataset  [Data Race Trace Example 1](http://dkan.isp.uni-luebeck.de/dataset/data-race-trace-example-1). With the [web interface of the TeSSla tool](http://dkan.isp.uni-luebeck.de/gcovapp/front/tesslafront?trace_file=trace.txt&tessla_file=race_tessla_0.txt&c_file=race.c.txt),  the TeSSLa specification, the trace data and the corresponding C program will be automatically downloaded from the data portal, and you can start to run TeSSLa to detect data race yourself. It is also possible to generate the trace data by running the C code in the tool. In addition, there are APIs for directly [checking the TeSSLa specification inside the  data portal](http://dkan.isp.uni-luebeck.de/dataset/data-race-trace-example-1/resource/c9f1c7ed-1a14-4edd-8310-f1f0fd9b7a9e), and obtain the result immediately.
+```
+...
+101931087340755: dataRace = true
+101931087602506: dataRace = true
+101931087720298: badInterleave = ()
+101931087720298: dataRace = true
+101931087727045: dataRace = true
+101931087729066: dataRace = true
+101931088065216: dataRace = true
+101931088094015: badInterleave = ()
+101931088094015: dataRace = true
+101931088161967: dataRace = true
+...
+```
 
 ## The Specification Language TeSSLa
 

@@ -1,0 +1,14 @@
+$timeunit = "ms"
+2000: start
+3000: send
+3500: send
+4000: send
+4500: send
+7000: send
+8000: send
+11000: stop
+12000: send
+14000: start
+15000: send
+17500: send
+19000: send

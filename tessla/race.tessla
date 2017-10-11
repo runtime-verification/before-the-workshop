@@ -1,0 +1,40 @@
+# observation specification
+def thread1_reads := load_exec(line_number = 9)
+def thread2_reads := load_exec(line_number = 16)
+def thread1_writes := store_exec(line_number = 9)
+def thread2_writes := store_exec(line_number = 16)
+
+# are threads reading or writing at all?
+def one_thread_reads := thread1_reads || thread2_reads
+def two_threads_read := thread1_reads && thread2_reads
+def one_thread_writes := thread1_writes || thread2_writes
+
+# if two threads are reading a variable which is written by one thread,
+# we found a potential data race
+def dataRace := two_threads_read && one_thread_writes
+out dataRace
+
+# for more concrete results look at the time stamps
+def time_read := time(one_thread_reads)
+def time_write := time(one_thread_writes)
+
+# if time stamp of second to last read is greater than time stamp of last write,
+# then two reads happened without a write in between --> bad interleave
+def badInterleave := if last(time_read) > default(time_write, 0) then ()
+out badInterleave
+
+
+
+# Standard Library
+# ================
+
+# Return the last event on `a` that is not the current one.
+def last(x) := last(x,x)
+
+# `store_exec(line_number)` contains an event with value `true` for every store
+# instruction association with the given line number in the C code
+def store_exec(line_number) := if instruction == "store" && line == line_number then true
+
+# `load_exec(line_number)` contains an event with value `true` for every load
+# instruction association with the given line number in the C code
+def load_exec(line_number) := if instruction == "load" && line == line_number then true
