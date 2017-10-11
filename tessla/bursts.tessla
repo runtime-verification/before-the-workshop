@@ -1,0 +1,81 @@
+in send: Events<Unit>
+in start: Events<Unit>
+in stop: Events<Unit>
+
+# Specify burst property: Up to 3 events are allows during burst length of 2 seconds.
+# During the waiting period of 1 second immediately after the burst period no event is allowed.
+def property :=
+  bursts(
+    send,
+    burstLength = 2s,
+    waitingPeriod = 1s,
+    burstAmount = 3
+  )
+
+# The communication is ready between start and stop
+def busReady := defined(start) && default(time(start), 0) > default(time(stop), 0)
+
+# If the communication bus is not ready, then no event allowed.
+# If the bus is ready, then events must follow the burst pattern defined above.
+def correct := if !busReady
+  then noEvent(send, since = falling(busReady))
+  else property
+
+# Outputs
+out busReady
+out correct
+
+
+
+
+# Standard Library
+# ================
+
+# Count the number of events on `values`. Reset the output to 0
+# on every event on `reset`.
+def eventCount(values, reset) := {
+  def count := default(
+    # `reset` contains the latest event
+    if default(time(reset) > time(values), false)
+    then 0
+    # `reset` and `values` latest event happen simultaneously
+    else if default(time(reset) == time(values), false)
+    then 1
+    # `values` contains the latest event --> increment counter
+    else last(count, values) + 1
+  , 0)
+  count
+}
+
+# Check if events on `e` follow the burst pattern:
+# After first event on `e` only `burstAmount` many events allowed
+# during `burstLength` time. After `burstLength` during `waitingPeriod`
+# time no event allowed. After `waitingPeriod` we wait for the next event
+# on `e`.
+def bursts(e, burstLength, waitingPeriod, burstAmount) := {
+  def burstStarts :=
+    default(
+      if time(e) - last(time(burstStarts), e) >= burstLength + waitingPeriod
+      then e,
+      e)
+  eventCount(e, reset = burstStarts) <= burstAmount &&
+    default(time(e) < time(burstStarts) + burstLength, false)
+}
+
+# Check if no event happened on `on` after last event on `since`.
+def noEvent(on, since) :=
+  eventCount(on, reset = since) == 0
+
+# Detect rising edge on `condition`.
+def rising(condition) :=
+  if condition && !last(condition) then ()
+
+# Detect falling edge on `condition`
+def falling(condition) :=
+  if !condition && last(condition) then ()
+
+# Check if there already was a first event on `a`
+def defined(a) := default(const(true, a), false)
+
+# Return the last event on `a` that is not the current one.
+def last(a) := last(a,a)
