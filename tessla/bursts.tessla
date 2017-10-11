@@ -2,8 +2,8 @@ in send: Events<Unit>
 in start: Events<Unit>
 in stop: Events<Unit>
 
-# Specify burst property: Up to 3 events are allows during burst length of 2 seconds.
-# During the waiting period of 1 second immediately after the burst period no event is allowed.
+# Specify burst property: Up to 3 events are allowed during burst length of 2 seconds.
+# During the waiting period of 1 second immediately after the burst period no events are allowed.
 def property :=
   bursts(
     send,
@@ -15,7 +15,7 @@ def property :=
 # The communication is ready between start and stop
 def busReady := defined(start) && default(time(start), 0) > default(time(stop), 0)
 
-# If the communication bus is not ready, then no event allowed.
+# If the communication bus is not ready, then no events are allowed.
 # If the bus is ready, then events must follow the burst pattern defined above.
 def correct := if !busReady
   then noEvent(send, since = falling(busReady))
@@ -38,7 +38,7 @@ def eventCount(values, reset) := {
     # `reset` contains the latest event
     if default(time(reset) > time(values), false)
     then 0
-    # `reset` and `values` latest event happen simultaneously
+    # `reset` and `values` latest events happen simultaneously
     else if default(time(reset) == time(values), false)
     then 1
     # `values` contains the latest event --> increment counter
@@ -48,9 +48,9 @@ def eventCount(values, reset) := {
 }
 
 # Check if events on `e` follow the burst pattern:
-# After first event on `e` only `burstAmount` many events allowed
+# After an event on `e` only `burstAmount` many events are allowed
 # during `burstLength` time. After `burstLength` during `waitingPeriod`
-# time no event allowed. After `waitingPeriod` we wait for the next event
+# time no events are allowed. After `waitingPeriod` we wait for the next event
 # on `e`.
 def bursts(e, burstLength, waitingPeriod, burstAmount) := {
   def burstStarts :=
@@ -65,10 +65,6 @@ def bursts(e, burstLength, waitingPeriod, burstAmount) := {
 # Check if no event happened on `on` after last event on `since`.
 def noEvent(on, since) :=
   eventCount(on, reset = since) == 0
-
-# Detect rising edge on `condition`.
-def rising(condition) :=
-  if condition && !last(condition) then ()
 
 # Detect falling edge on `condition`
 def falling(condition) :=
