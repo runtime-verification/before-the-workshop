@@ -2,7 +2,7 @@
 
 The Temporal Stream-based Specification Language (TeSSLa) operates on asynchronous real-time streams. It was first created for specifying properties about programs running on multi core systems and it is currently used and developed in the [COEMS](https://www.coems.eu) project.
 
-## Authors: Torben Scheffel
+## Author: Torben Scheffel
 
 In case of any questions do not hesitate to contact [Torben](http://www.isp.uni-luebeck.de/staff/scheffel).
 
@@ -15,8 +15,8 @@ in send: Events<Unit>
 in start: Events<Unit>
 in stop: Events<Unit>
 
-# Specify burst property: Up to 3 events are allows during burst length of 2 seconds.
-# During the waiting period of 1 second immediately after the burst period no event is allowed.
+# Specify burst property: Up to 3 events are allowed during burst length of 2 seconds.
+# During the waiting period of 1 second immediately after the burst period no events are allowed.
 def property :=
   bursts(
     send,
@@ -28,7 +28,7 @@ def property :=
 # The communication is ready between start and stop
 def busReady := defined(start) && default(time(start), 0) > default(time(stop), 0)
 
-# If the communication bus is not ready, then no event allowed.
+# If the communication bus is not ready, then no events are allowed.
 # If the bus is ready, then events must follow the burst pattern defined above.
 def correct := if !busReady
   then noEvent(send, since = falling(busReady))
@@ -39,7 +39,7 @@ out busReady
 out correct
 ```
 
-(Note that we only use ruby syntax highlighting, because GitHub supports it and it is syntactically close enough to TeSSLa.)
+(Note that we only use ruby syntax highlighting because GitHub supports it and it is syntactically close enough to TeSSLa.)
 
 You can find the full specification in [`bursts.tessla`](bursts.tessla).
 
@@ -74,7 +74,7 @@ $timeunit = "ms"
 ...
 ```
 
-TeSSLa consists of only seven basic operators and a huge macro system, which allows to write specifications as the one above. For example the macro `eventCount` is defined as follows:
+TeSSLa consists of only six basic operators and a huge macro system, which allows to write specifications as the one above. For example the macro `eventCount` (which is used for the definition of `bursts`, see the full specification in [`bursts.tessla`](bursts.tessla)) is defined only using basic operators as follows:
 
 ```ruby
 # Count the number of events on `values`. Reset the output to 0
@@ -84,7 +84,7 @@ def eventCount(values, reset) := {
     # `reset` contains the latest event
     if default(time(reset) > time(values), false)
     then 0
-    # `reset` and `values` latest event happen simultaneously
+    # `reset` and `values` latest events happen simultaneously
     else if default(time(reset) == time(values), false)
     then 1
     # `values` contains the latest event --> increment counter
@@ -98,7 +98,7 @@ The parts of the standard library used in the specification given above is inclu
 
 ## Application Example: Data race detection
 
-Data races occur in multi threaded programs when two or more threads access the same memory location concurrently, and at least one of the accesses is for writing, and the threads are not using any exclusive locks to control their accesses to that memory. The C program [`race.c`](race.c) is an example of a race prone program. 
+Data races occur in multi threaded programs when two or more threads access the same memory location concurrently, at least one of the accesses is for writing, and the threads are not using any exclusive locks to control their accesses to that memory. The C program [`race.c`](race.c) is an example of a race prone program. 
 
 ```c
 #include <stdio.h>
@@ -132,9 +132,9 @@ int main() {
 }
 ```
 
-Here we have two threads, both calling the functions that should count up to 100. Since there are no synchronization mechanisms between threads on the shared variable `x` a data race is present. For example, let us assume that the current value of `x` is 5. One thread may read the current value of `x`, but before this thread increments `x`, the other thread may also read the same value. Then, both threads may store 6 in `x`. Such situation happens any time both threads read the same value. So, the final value of `x` may vary in each run.
+Here we have two threads, both calling the functions that should count up to 100. Since there are no synchronization mechanisms between threads on the shared variable `x` a data race is present. For example, let us assume that the current value of `x` is 5. One thread may read the current value of `x`, but before this thread increments `x`, the other thread may also read the same value. Then, both threads may store 6 in `x`. Such situations happen any time both threads read the same value. So, the final value of `x` may vary in each run.
 
-If the file [`race.trace`](race.trace) contains the trace of one execution of the C code, with the [TeSSLa specification `race.tessla`](race.tessla) given bellow, we can do two things. First, we can issue an event in the `dataRace` stream when we detect that two threads are reading the shared variable and at least one of them is writing. Second, we can issue an event in `badInterleave` stream when we detect that the threads have indeed interleaved in such way that the value of the shared variable is corrupted. An event in dataRace is issued regardless of whether threads interleave correctly or not in the current execution. 
+If the file [`race.trace`](race.trace) contains the trace of one execution of the C code, with the [TeSSLa specification `race.tessla`](race.tessla) given bellow, we can do two things. First, we can issue an event in the `dataRace` stream when we detect that two threads are reading the shared variable and at least one of them is writing. Second, we can issue an event in the `badInterleave` stream when we detect that the threads have indeed interleaved in such a way that the value of the shared variable is corrupted. An event in dataRace is issued regardless of whether threads interleave correctly or not in the current execution. 
 
 ```ruby
 # observation specification
@@ -157,7 +157,7 @@ out dataRace
 def time_read := time(one_thread_reads)
 def time_write := time(one_thread_writes)
 
-# if time stamp of second to last read is greater than time stamp of last write,
+# if the time stamp of second to last read is greater than the time stamp of the last write,
 # then two reads happened without a write in between --> bad interleave
 def badInterleave := if last(time_read) > default(time_write, 0) then ()
 out badInterleave
