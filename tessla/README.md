@@ -1,4 +1,4 @@
-## TeSSLa (under construction...)
+## TeSSLa
 
 The Temporal Stream-based Specification Language (TeSSLa) operates on asynchronous real-time streams. It was first created for specifying properties about programs running on multi core systems and it is currently used and developed in the [COEMS](https://www.coems.eu) project.
 
