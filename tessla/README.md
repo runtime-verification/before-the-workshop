@@ -41,13 +41,13 @@ out correct
 
 (Note that we only use ruby syntax highlighting, because GitHub supports it and it is syntactically close enough to TeSSLa.)
 
-You can find the full specification in [`bursts.tessla`](bursts.tessla), the input trace in [`bursts.input`](bursts.input) and the monitoring output in [`bursts.output`](bursts.output).
+You can find the full specification in [`bursts.tessla`](bursts.tessla).
 
 The idea of the specification above is depicted in the following diagram:
 
-![bursts.png]
+![Diagram of the input and output events in the bursts example](bursts.png)
 
-The input trace contains exactly those events shown in the diagram above:
+The [input trace `bursts.input`](bursts.input) contains exactly those events shown in the diagram above:
 
 ```
 $timeunit = "ms"
