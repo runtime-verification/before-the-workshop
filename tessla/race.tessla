@@ -18,7 +18,7 @@ out dataRace
 def time_read := time(one_thread_reads)
 def time_write := time(one_thread_writes)
 
-# if time stamp of second to last read is greater than time stamp of last write,
+# if the time stamp of second to last read is greater than the time stamp of the last write,
 # then two reads happened without a write in between --> bad interleave
 def badInterleave := if last(time_read) > default(time_write, 0) then ()
 out badInterleave
@@ -32,9 +32,9 @@ out badInterleave
 def last(x) := last(x,x)
 
 # `store_exec(line_number)` contains an event with value `true` for every store
-# instruction association with the given line number in the C code
+# instruction associated with the given line number in the C code
 def store_exec(line_number) := if instruction == "store" && line == line_number then true
 
 # `load_exec(line_number)` contains an event with value `true` for every load
-# instruction association with the given line number in the C code
+# instruction associated with the given line number in the C code
 def load_exec(line_number) := if instruction == "load" && line == line_number then true
