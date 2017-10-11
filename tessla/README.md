@@ -10,21 +10,89 @@ The Temporal Stream-based Specification Language (TeSSLa) operates on asynchrono
 
 ### Data race detection
 
-Data races occur in multi threaded programs when two or more threads access the same memory location concurrently, and at least one of the accesses is for writing, and the threads are not using any exclusive locks to control their accesses to that memory. C program [race.c](../dataset/data-race-trace-example-1/resource/6f5c2a2e-18d5-4bff-b857-e124c8f9470c) is an example of a race prone program. 
+Data races occur in multi threaded programs when two or more threads access the same memory location concurrently, and at least one of the accesses is for writing, and the threads are not using any exclusive locks to control their accesses to that memory. C program [race.c](http://dkan.isp.uni-luebeck.de/dataset/data-race-trace-example-1/resource/6f5c2a2e-18d5-4bff-b857-e124c8f9470c) is an example of a race prone program. 
 
-![Image of C code](http://dkan.isp.uni-luebeck.de/sites/default/files/ccode.jpg)
+```c
+#include <stdio.h>
+#include <pthread.h>
+#define LOOPS 100
+
+int x = 0;
+
+void* count1(void *arg) {
+    for ( int i = 0; i < LOOPS; i++ ) {
+        x++; 
+    }
+    return NULL;
+}
+
+void* count2(void *arg) {
+    for ( int i = 0; i < LOOPS; i++ ) {
+        x++; 
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t p1, p2;
+    pthread_create( &p1, NULL, count1, NULL );
+    pthread_create( &p2, NULL, count2, NULL );
+    pthread_join(p1, NULL);
+    pthread_join(p2, NULL);
+    printf( "Counted %d\n", x );
+    return 0;
+}
+```
 
 Here we  have two threads, both calling the functions that should count up to 100. Since there are no synchronization mechanisms between threads on the shared variable <code>x</code> a data race is present. For example, let us assume that the current value of <code>x</code> is 5. One thread may read the current value of <code>x</code>, but before this thread increments <code>x</code>, the other thread may also read the same value. Then, both threads may store 6 in <code>x</code>. Such situation happens any time both threads read the same value. So, the final value of <code>x</code> may vary in each run.
 
-If the file [traces.log](../dataset/data-race-trace/resource/df1b9c7f-c788-4560-883c-84baf34c47ce)  contains the trace of one execution of the C code, with the [TeSSLa specification](../dataset/data-race-trace-example-1/resource/2d5ea36e-f475-4cbf-9e21-2f6718b75856)  given bellow,  we can do two things. First, we can issue an event in the <code>dataRace</code> stream when we detect that two threads are reading the shared variable and at least one of them is writing. Second, we can issue an event in <code>badInterleave</code> stream when we detect that the threads have indeed interleaved in such way that the value of the shared variable is corrupted. An event in dataRace is issued regardless of whether threads interleave correctly or not in the current execution. 
+If the file [traces.log](http://dkan.isp.uni-luebeck.de/dataset/data-race-trace/resource/df1b9c7f-c788-4560-883c-84baf34c47ce)  contains the trace of one execution of the C code, with the [TeSSLa specification](http://dkan.isp.uni-luebeck.de/dataset/data-race-trace-example-1/resource/2d5ea36e-f475-4cbf-9e21-2f6718b75856) given bellow,  we can do two things. First, we can issue an event in the <code>dataRace</code> stream when we detect that two threads are reading the shared variable and at least one of them is writing. Second, we can issue an event in <code>badInterleave</code> stream when we detect that the threads have indeed interleaved in such way that the value of the shared variable is corrupted. An event in dataRace is issued regardless of whether threads interleave correctly or not in the current execution. 
 
-![Image of Tessla spec](http://dkan.isp.uni-luebeck.de/sites/default/files/tesslaspec.jpg)
+```ruby
+def merge(x,y) := if default(x==x, false) || default(y==y, false) then ()
+
+def T1_reads_x:= if (function == "count1" && instruction == "load" && line == 9) then ()
+out T1_reads_x
+
+def T2_reads_x:= if (function == "count2" && instruction == "load" && line == 16) then ()
+out T2_reads_x
+
+def T1_writes_x:= if (function == "count1" && instruction == "store" && line == 9) then ()
+out T1_writes_x 
+
+def T2_writes_x:= if (function == "count2" && instruction == "store" && line == 16) then ()
+out T2_writes_x
+
+def two_threads_read := T1_reads_x == () && T2_reads_x == () 
+
+def a_thread_writes := merge(T1_writes_x,T2_writes_x) == ()
+
+def dataRace := if two_threads_read && a_thread_writes then ()
+out dataRace
+
+def time_read_x := time(merge(T1_reads_x,T2_reads_x))
+
+def time_write_x := time(merge(T1_writes_x,T2_writes_x))
+
+def badInterleave := if last(time_read_x,time_read_x) > default(time_write_x,0) then ()
+out badInterleave
+
+
+in line: Events<Int>
+in column: Events<Int>
+in instruction: Events<String>
+in function: Events<String>
+
+def code_line_exec(l) := if line == l && last(line, line) != l then ()
+def function_call(name) := if function == name && last(function, function) != name && last(instruction, instruction) == "call" then ()
+def function_return(name) := if function == name && instruction == "ret" then ()
+```
 
 TeSSLa provides a command line tool and a web interface which we can use to check the trace and find the data race and  interleave errors.
 
 ![Image of Tessla tool](http://dkan.isp.uni-luebeck.de/sites/default/files/tesslaline.jpg)
 
-All the above  C program, the trace generated by the program and the TeSSLa specification are stored in our  [COEMS open data portal](http://dkan.isp.uni-luebeck.de/) as dataset  [Data Race Trace Example 1](../dataset/data-race-trace-example-1) . With the [web interface of the TeSSla tool](http://dkan.isp.uni-luebeck.de/gcovapp/front/tesslafront?trace_file=trace.txt&tessla_file=race_tessla_0.txt&c_file=race.c.txt) ,  the TeSSLa specification, the trace data and the corresponding C program will be automatically downloaded from the data portal, and you can start to run TeSSLa to detect data race yourself.  It is also possible to generate the trace data by running the C code in the tool. In addition, there are APIs for directly [checking the TeSSLa specification inside the  data portal](../dataset/data-race-trace-example-1/resource/c9f1c7ed-1a14-4edd-8310-f1f0fd9b7a9e), and obtain the result immediately.
+All the above  C program, the trace generated by the program and the TeSSLa specification are stored in our  [COEMS open data portal](http://dkan.isp.uni-luebeck.de/) as dataset  [Data Race Trace Example 1](http://dkan.isp.uni-luebeck.de/dataset/data-race-trace-example-1). With the [web interface of the TeSSla tool](http://dkan.isp.uni-luebeck.de/gcovapp/front/tesslafront?trace_file=trace.txt&tessla_file=race_tessla_0.txt&c_file=race.c.txt),  the TeSSLa specification, the trace data and the corresponding C program will be automatically downloaded from the data portal, and you can start to run TeSSLa to detect data race yourself. It is also possible to generate the trace data by running the C code in the tool. In addition, there are APIs for directly [checking the TeSSLa specification inside the  data portal](http://dkan.isp.uni-luebeck.de/dataset/data-race-trace-example-1/resource/c9f1c7ed-1a14-4edd-8310-f1f0fd9b7a9e), and obtain the result immediately.
 
 ## The Specification Language TeSSLa
 
