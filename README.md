@@ -22,6 +22,7 @@ URL: http://www.dagstuhl.de/en/program/calendar/semhp/?semnr=17462
 
 - [TraceContract](tracecontract/README.md)
 - [QEA](qea/README.md)
+- [Modbat](modbat/README.md)
 
 # How are we going to use this info?
 
