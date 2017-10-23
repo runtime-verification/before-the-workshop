@@ -1,4 +1,4 @@
-[//] # RV Challenge & Cheat Sheet (max 2 pages)
+# Modbat, a model-based tester
 
 ## Modbat's DSL
 ## Author(s): Cyrille Artho
@@ -29,8 +29,6 @@ In contrast to ScalaCheck, which is weak in these areas, Modbat does not
 have any elaborate mechanism to generate diverse input data. Indeed,
 the design decision is to combine data generators from ScalaCheck for
 such cases.
-
-Consider including the following and introducing additional structure if you want.
 
 ## References & links
 
