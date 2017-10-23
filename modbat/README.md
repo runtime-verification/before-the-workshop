@@ -47,8 +47,10 @@ other operations on the list; see [Tool
 demo](https://people.kth.se/~artho/modbat/tooldemo/).
 
 In this example, only a few elements of Modbat's DSL are present: The
-use of a custom "assert" function, and the state transitions at the
-bottom. The rest of the specification is written directly as Scala code.
+"choose" function that returns a random number, a custom "assert"
+function that is integrated with Modbat's error trace reporting, and
+the state transitions at the bottom. The rest of the specification is
+written directly as Scala code.
 
 More complex models would include DSL elements to handle exceptions,
 non-deterministic outcomes of method calls, nested models, and more.
