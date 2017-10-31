@@ -46,14 +46,14 @@ Example specifications:
 
 ## Standards
 
-* [PSL (IEEE Std 1850<sup>Tm</sup>-2005)]{https://standards.ieee.org/findstds/standard/1850-2010.html}
-* [PSL as part of VHDL (IEEE Std 1076<sup>Tm</sup>-2008)]{https://standards.ieee.org/findstds/standard/1076-2008.html}
+* [PSL (IEEE Std 1850<sup>Tm</sup>-2005)](https://standards.ieee.org/findstds/standard/1850-2010.html)
+* [PSL as part of VHDL (IEEE Std 1076<sup>Tm</sup>-2008)](https://standards.ieee.org/findstds/standard/1076-2008.html)
 
 ## References & links
 
-* [Temporal Logic Made Practical]{http://www.cis.upenn.edu/~fisman/documents/EF_HBMC14.pdf}
+* [Temporal Logic Made Practical](http://www.cis.upenn.edu/~fisman/documents/EF_HBMC14.pdf)
 In  Clarke, E.M., Henzinger, Th.A., Veith, H., Bloem, R. (Eds.), Handbook of Model Checking.  Springer (to appear).  
-* [A Practical Introduction to PSL]{http://www.springer.com/gp/book/9780387361239}
-* [RuleBase]{https://www.research.ibm.com/haifa/projects/verification/Formal_Methods-Home/}
+* [A Practical Introduction to PSL](http://www.springer.com/gp/book/9780387361239)
+* [RuleBase](https://www.research.ibm.com/haifa/projects/verification/Formal_Methods-Home/)
 
 
