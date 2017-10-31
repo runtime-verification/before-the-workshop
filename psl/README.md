@@ -46,7 +46,7 @@ Example specifications:
 
 ## Standards
 
-* [PSL (IEEE Std 1850<sup>Tm</sup>-2005)]{https://standards.ieee.org/findstds/standard/1850-2010.htm}
+* [PSL (IEEE Std 1850<sup>Tm</sup>-2005)]{https://standards.ieee.org/findstds/standard/1850-2005.html}
 * [PSL as part of VHDL (IEEE Std 1076<sup>Tm</sup>-2008)]{https://standards.ieee.org/findstds/standard/1076-2008.html}
 
 ## References & links
