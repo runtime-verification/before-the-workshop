@@ -29,6 +29,7 @@ This command generates 3 files:
 
 * checking C function contract
 
+```c
 /*@ requires \forall integer i; 0 <= i < len ==> \valid(a+i);
   @ requires 0 <= idx < len;
   @ 
@@ -74,6 +75,7 @@ int main(void) {
   replace(a, 10, 5, 7);
   return 0;
 }
+```
 
 The function contract is enclosed in /*@ ... */ special comment.
 It specifies 2 preconditions and 3 behaviors that specifies the postcondition.
@@ -106,6 +108,7 @@ nor completeness/disjointness, but checks all the other properties.
 For instance, here the last statement of replace ('return idx;') is buggy and
 violates the very last postcondition 'ensures a[\result] == \old(a[idx]);':
 
+```
 $ e-acsl-gcc.sh -c replace.c
 $ ./a.out.e-acsl
 Postcondition failed at line 20 in function replace.
@@ -114,6 +117,7 @@ The failing predicate is:
      *(a + idx) != value) ==>
 *(\old(a) + \result) == \old(*(a + idx)).
 Abandon
+```
 
 * checking well-ordering of C function calls
 
@@ -121,6 +125,7 @@ The Aorai plug-in of Frama-C provides support for specifying accepted sequences
 of function calls. Accepted formats are ya automata (in Ya language) and Buchi
 automata (in Promela language). Here is a small example of a Ya automate:
 
+```
 %init: init;
 %accept: OK;
 %deterministic;
@@ -133,6 +138,7 @@ mode1: { [ f(); g() ] } -> OK;
 mode2: { [ g()+; h() ] } -> OK;
 
 OK: -> OK;
+```
 
 It specifies that there are 2 modes: if 'mode == 1', then function 'f' must be 
 called before function 'g', and if 'mode == 2', then function 'g' must be 
@@ -141,11 +147,15 @@ called at least once before function 'h'.
 Assuming a C code, Aorai is able to add pieces of C code and ACSL annotations
 to check that the initial code satisfies this specification:
 
+```
 $ frama-c my-file.c -aorai-automata spec.ya -aorai-output-c-file generated.c
+```
 
 Then E-ACSL is able to verify it:
 
+```
 $ e-acsl-gcc.sh -c -X generated.c
+```
 
 ## References & links
 
