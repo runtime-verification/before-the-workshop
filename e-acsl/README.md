@@ -15,7 +15,9 @@
 All the E-ACSL specifications required to detect a wide class of undefined
 behaviors are automatically generated and monitored through
 
+```
 $ e-acsl-gcc.sh -c --rte=all my_favorite_files.c
+```
 
 This command generates 3 files:
 ./a.out:
