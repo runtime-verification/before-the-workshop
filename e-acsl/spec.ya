@@ -1,0 +1,12 @@
+%init: init;
+%accept: OK;
+%deterministic;
+
+init:
+  { mode == 1 } -> mode1
+| { mode == 2 } -> mode2;
+
+mode1: { [ f(); g() ] } -> OK;
+mode2: { [ g()+; h() ] } -> OK;
+
+OK: -> OK;
