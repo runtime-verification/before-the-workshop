@@ -20,12 +20,12 @@ $ e-acsl-gcc.sh -c --rte=all my_favorite_files.c
 ```
 
 This command generates 3 files:
-./a.out:
+- ./a.out:
         uninstrumented binary (as compiled by gcc)
-./a.out.frama-c:
+- ./a.out.frama-c:
         generated C source code containing the formal E-ACSL specifications
         and the inline monitor
-./a.out.e-acsl:
+- ./a.out.e-acsl:
         instrumented binary that monitors the E-ACSL specifications encoding the
         undefined behaviors (compilation of ./a.out.frama-c by gcc)
 
@@ -105,10 +105,15 @@ contexts.
 'disjoint behaviors' specifies that the 3 behaviors are pairwise disjoint
 (no overlapping of 'assumes').
 
-Currently, the tool E-ACSL is not able to verify neither the 'assigns' clauses
-nor completeness/disjointness, but checks all the other properties.
-For instance, here the last statement of replace ('return idx;') is buggy and
-violates the very last postcondition 'ensures a[\result] == \old(a[idx]);':
+In addition to the contract, the loop is also annotated to check its invariants,
+its termination (through a variant) and what memory locations it may
+observationally modfied ('loop assigns').
+
+Currently, the tool E-ACSL is not able to verify the 'assigns' clauses, the
+'complete behaviors', 'disjoint behaviors', the 'loop assigns' and the 'loop
+variant' clauses. It checks all the other properties. For instance, here the
+last statement of replace ('return idx;') is buggy and violates the very last
+postcondition 'ensures a[\result] == \old(a[idx]);':
 
 ```
 $ e-acsl-gcc.sh -c replace.c
