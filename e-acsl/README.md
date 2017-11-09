@@ -20,12 +20,12 @@ $ e-acsl-gcc.sh -c --rte=all my_favorite_files.c
 ```
 
 This command generates 3 files:
-- ./a.out:
+  - ./a.out:
         uninstrumented binary (as compiled by gcc)
-- ./a.out.frama-c:
+  - ./a.out.frama-c:
         generated C source code containing the formal E-ACSL specifications
         and the inline monitor
-- ./a.out.e-acsl:
+  - ./a.out.e-acsl:
         instrumented binary that monitors the E-ACSL specifications encoding the
         undefined behaviors (compilation of ./a.out.frama-c by gcc)
 
