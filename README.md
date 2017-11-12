@@ -26,6 +26,7 @@ URL: http://www.dagstuhl.de/en/program/calendar/semhp/?semnr=17462
 - [PSL](psl/README.md)
 - [TeSSLa](tessla/README.md)
 - [E-ACSL](e-acsl/README.md)
+- [LOLA](lola/README.md)
 
 # How are we going to use this info?
 
