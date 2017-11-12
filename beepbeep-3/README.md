@@ -155,7 +155,17 @@ phase where this occurs), one processor chain can be made to detect the
 on/off state of multiple appliances in real time, simply by analyzing power
 readings.
 
-### Example 8: distribution of computation
+### Example 8: network packets
+
+The [Netpack](https://bitbucket.org/bb3netpack/netp) palette allows BeepBeep
+to receive network packets as events, and to query those packets for some of
+their fields (IP address, size, etc.).
+The following processor chain uses the Netp and Tuple palettes to compute
+the cumulative bandwidth for each incoming IP address on a network interface.
+
+![Processor chain](Packets.png?raw=true)
+
+### Example 9: distribution of computation
 
 One of BeepBeep's palettes allows data to be transmitted over the network
 through HTTP requests. On Machine A (top), numbers are summed, packed into list
