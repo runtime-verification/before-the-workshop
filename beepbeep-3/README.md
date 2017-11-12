@@ -1,5 +1,4 @@
-BeepBeep 3
-==========
+<img src="http://liflab.github.io/beepbeep-3/images/LogoBB3-1000px.png" width="300"/>
 
 ## Author
 
@@ -126,7 +125,27 @@ number of days items are on sale since the beginning of the trace.
 
 ### Example 7: signal processing
 
+In this example, we receive power readings from a sensor connected to an
+electrical box, 60 times per second. This was discussed in the paper
+[Activity Recognition Through Complex Event Processing: First Findings](https://www.researchgate.net/publication/299763967).
 
+The first part of the query
+performs signal processing on those readings: it filters them to only keep
+signal peaks past a certain threshold, and flattens everything else to zero.
+
+![Processor chain 1](Signal-1.png?raw=true)
+
+A similar processor chain (not shown) can be made to detect plateaus. These
+two streams can then be fed to a Moore machine (below), which, depending on
+what peaks (positive and negative) and plateaus it receives, can keep track
+of the state of a specific appliance (on or off).
+
+![Processor chain 2](Signal-2.png?raw=true)
+
+Since each appliance has its own "signature" (intensity of peaks, plateaus, and
+phase where this occurs), one processor chain can be made to detect the
+on/off state of multiple appliances in real time, simply by analyzing power
+readings.
 
 ### Example 8: distribution of computation
 
