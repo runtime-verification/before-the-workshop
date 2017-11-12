@@ -127,8 +127,11 @@ output int tcpSynScan<src,dst>
  
 trigger any(tcpSynScan > threshold2)
 ```
+The specification checks whether there are any open handshakes (waitForAck) where no acknowledgment was received, and then checks if the corresponding IP-address repeats this action more than threshold2 times (tcpSynScan).
 
 ### Amazon ratings
+We compute the average star rating of a product and compare the average of a long running window (100 s) to the average rating in the last tenth of that window and detect a significant short-term increase. If the comparison rises above a threshold, a trigger message is generated.
+
 ```c
 frequency 0.1 Hz
 input string uid, pid
