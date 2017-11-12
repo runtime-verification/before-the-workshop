@@ -11,11 +11,19 @@ BeepBeep is an event stream processing engine. In BeepBeep, streams of events
 processors can be used as the input of other processors, forming potentially
 complex *processor chains*.
 
+BeepBeep is organized along a modular architecture. The
+main part of BeepBeep is called the *engine*, which provides the
+basic classes for creating processors and functions, and contains
+a handful of general-purpose processors for manipulating traces.
+The rest of BeepBeep's functionalities is dispersed across a
+number of optional *palettes*.
+
 ## Creating processor chains
 
-A first way of creating processor chains is programmatically. BeepBeep can be
-used as a Java library that provides objects for creating, connecting and
-running `Processor` objects.
+BeepBeep provides multiple ways to create processor pipes
+and to fetch their results. The first way is programmatically,
+using BeepBeep as a library and Java as the glue code for
+creating the processors and connecting them.
 
 ### Example 1: cumulative average
 
@@ -163,6 +171,32 @@ a `Print` processor that displays them in the console.
 This whole process takes 30 lines of code.
 See the [Java code](https://liflab.github.io/beepbeep-3-examples/classnetwork_1_1httppush_1_1_packer_example.html)
 that builds this processor chain.
+
+## Specification languageS
+
+In addition to directly instantiating and connecting processors (as was shown
+above), BeepBeep also offers the possibility to create
+**domain-specific languages** with subsets of all the available processors.
+
+To this end, BeepBeep provides a runtime parser, called
+[Bullwinkle](https://github.com/sylvainhalle/Bullwinkle). Bullwinkle can be
+given a BNF grammar at runtime, and create a parse tree from any string.
+A `ParseTreeVisitor` object can then be instructed to perform a postfix
+traversal of the tree, and manipulate a stack of Java `Object`s. It is then
+up to the user to define what to do for each symbol of the grammar when it
+is visited. Typically, this amounts to popping objects from the stack (for
+example, already-instantiated `Processor` objects, pipe them together in
+a specific way, and pushing the resulting object back on the stack.
+
+With the help of a BNF grammar file and a custom-made `ParseTreeVisitor`,
+one can hence easily create a domain-specific language with an arbitary
+syntax, and a parser that converts an expression of this language into a
+BeepBeep processor chain.
+
+BeepBeep provides its own query language, called eSQL and discussed in
+[this paper](https://www.researchgate.net/publication/313456232),
+but this language is no more "built-in" than any language a
+user could define.
 
 ## References and links
 
