@@ -62,6 +62,9 @@ For real-time specifications, the monitoring algorithm refers to the timestamps 
 For more on the usage of the tool, check out the [LOLA](https://www.react.uni-saarland.de/tools/lola/) webpage. 
 ## Specifications from Case Studies
 ### UAS
+In this specification we validate the output of the navigation part of the sensor fusion in unmanned aerial systems (UAS). 
+GPS signal jumps are computed by the Haversine formula (given by stream a). It compares the traveled distance, first by using  the velocity values received by the IMU unit, and second by computing the distance as measured by the GPS coordinates. All calculations are performed in Lola and compared against a threshold. Since the formula expects the latitude and longitude in radians and we receive them in decimal degree, we convert them first.
+
 ```c
 input  double lat, lon, ug, vg, wg, time_s, time_micros
 
