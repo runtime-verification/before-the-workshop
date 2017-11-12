@@ -88,7 +88,7 @@ moving around on a game field. The property "Turn Around" stipulates that
 every time a "walker" Pingu encounters a "blocker" Pingu, it must turn around
 and continue walking in the opposite direction.
 
-![Processor chain](Pingus.png?raw=true)
+![Processor chain](Pingus.png?raw=true) ![Function f1](Pingus-f1.png?raw=true) ![Function f2](Pingus-f2.png?raw=true)
 
 This property is complexified by two details relative to the implementation
 of the game. First, the collision is not pixel-perfect: an "encounter" between
@@ -101,6 +101,28 @@ three cycles of the game loop before the Pingu actually turns.
 
 ### Example 6: Moore Machines and parametric trace slicing
 
+This query corresponds to the
+[*Auction Bidding* property](http://crv.liflab.ca/wiki/index.php/Offline_Team2_Benchmark1)
+of the MarQ benchmark at the CRV 2016 --or actually an extended version. In
+this query, events are arrays of scalar values: the first element is
+always the "name" of the event (such as `buy`, `bid`, etc.), and the remaining
+events are parameters specific to each event type.
+
+![Processor chain](AuctionBidding-ext.png?raw=true)
+
+In this query, we first perform slicing of the input trace according to the
+ID of an item ("cheese processor"); each item has its own lifecycle,
+expressed as a Moore machine processor (grey box in the center); most of the
+machine's transitions have guards, depending on the contents of the current
+event, and also of the machine's state variables. Each Moore machine returns
+as its output the number of days its item has been on sale.
+
+The slicer's output is an array of numbers, corresponding to the last output
+of each active Moore machine (i.e. the number of days each item has been
+on sale). The rest of the query computes the average of these values, and
+pushes them into a set that accumulates them. This set could be used as the
+source for a scatterplot, which would display the fluctuation of the average
+number of days items are on sale since the beginning of the trace.
 
 ### Example 7: signal processing
 
