@@ -456,7 +456,7 @@ convenient modeling language.
 
 ## References & links
 
-* URL: https://github.com/havelund/tracecontract
+* URL: [https://github.com/havelund/tracecontract](https://github.com/havelund/tracecontract)
 * [*TraceContract: A Scala DSL for Trace Analysis*](tracecontract-fm-2011.pdf) Howard Barringer and Klaus Havelund, FM'11, Lecture Notes in Computer Science, vol. 6664, 2011. 
 
 
