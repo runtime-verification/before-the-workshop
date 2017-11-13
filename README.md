@@ -18,15 +18,15 @@ URL: http://www.dagstuhl.de/en/program/calendar/semhp/?semnr=17462
 
 * Make a link from the top `README.md` file to that local `README.md` file.
 
-# Tools and Languages
+# Tools and Languages (alphabetic order)
 
-- [TraceContract](tracecontract/README.md)
-- [QEA](qea/README.md)
-- [Modbat](modbat/README.md)
-- [PSL](psl/README.md)
-- [TeSSLa](tessla/README.md)
 - [E-ACSL](e-acsl/README.md)
 - [LOLA](lola/README.md)
+- [Modbat](modbat/README.md)
+- [PSL](psl/README.md)
+- [QEA](qea/README.md)
+- [TeSSLa](tessla/README.md)
+- [TraceContract](tracecontract/README.md)
 
 # How are we going to use this info?
 
