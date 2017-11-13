@@ -198,7 +198,7 @@ is visited. Typically, this amounts to popping objects from the stack (for
 example, already-instantiated `Processor` objects, pipe them together in
 a specific way, and pushing the resulting object back on the stack.
 
-With the help of a BNF grammar file and a custom-made `ParseTreeVisitor`,
+With the help of a BNF grammar file and a custom-made `ExpressionParser`,
 one can hence easily create a domain-specific language with an arbitary
 syntax, and a parser that converts an expression of this language into a
 BeepBeep processor chain.
