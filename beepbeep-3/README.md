@@ -4,6 +4,11 @@
 
 - Sylvain Hallé (shalle@acm.org)
 
+## Slides
+
+See the [slides of the Dagstuhl talk](https://www.slideshare.net/sylvainhalle/a-doityourself-specification-language-with-beepbeep-3-talk-dagstuhl-2017)
+on Slideshare.
+
 ## Description
 
 BeepBeep is an event stream processing engine. In BeepBeep, streams of events
