@@ -21,6 +21,7 @@ URL: http://www.dagstuhl.de/en/program/calendar/semhp/?semnr=17462
 # Tools and Languages (alphabetic order)
 
 - [E-ACSL](e-acsl/README.md)
+- [LogFire](logfire/README.md)
 - [LOLA](lola/README.md)
 - [Modbat](modbat/README.md)
 - [PSL](psl/README.md)
