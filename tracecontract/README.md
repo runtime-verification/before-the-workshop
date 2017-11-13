@@ -21,7 +21,7 @@ TraceContract was used daily at NASA Ames Research Center
 througout NASA's Lunar LADEE mission to verify
 command sequences before they were uploaded to the spacecraft. This application was likely succesful due to the expressiveness of TraceContract, being an extension of a high-level programming language.
 
-## Events
+## The Command Execution Study
 
 We want to write monitors of communication between a control center and a space craft. First we define an event type ``Event`` defining what events are monitored. Each event type forms a subclass of this type: 
 
@@ -36,14 +36,30 @@ A trait in scala corresponds to an abstract class in Java (although not quite th
 
 We have here defined three event types: commands that are submitted to the spacecraft, and events reporting whether the commands succeed or fail. Each command instance is identified by a name and a number (commands should be numbered with natural numbers: 0, 1, 2, ...).
 
-## Example 1 - Commands must succeed
+## Some Properties
 
-The first requirement we define is the following:
+Below is a list of properties we want to hold over traces of such events.
 
-> *Whenever a command is observed, a success should follow (with the same
->  command name and number), with no fail before that.* 
+- **P1.**  *Whenever a command is observed, a success should follow (with the same command name and number), with no fail before that.*
+- **P2.** *A command number cannot succeed more than once.*
+- **P3.** *We should see commands be issued one at a time - each command shall succeed before the next is issued.*
+- **P4.** *If a command is issued, and it subsequently at some later point succeeds, and if it succeeds again a second time immediately thereafter in the next step, then in the immediate subsequent step it must fail.*
+- **P5.** *Consecutive command numbers should increase by exactly 1. In addition, 
+collect the names of the commands issued and print them at the end
+of the trace.*
 
-This requirement is formulated as follows in TraceContract:
+## Formalized in TraceContract
+
+We now formalize the above properties in TraceContract. 
+
+## Property P1 - Commands must succeed
+
+Recall the property:
+
+**P1.** *Whenever a command is observed, a success should follow (with the same
+command name and number), with no fail before that.*
+
+This property is formulated as follows in TraceContract:
 
 ~~~scala
 class CommandsMustSucceed extends Monitor[Event] {
@@ -57,19 +73,19 @@ class CommandsMustSucceed extends Monitor[Event] {
 }
 ~~~
 
-The requirement is formulated as a class named ``CommandsMustSucceed`` that extends the ``Monitor`` class instantiated with the ``Event`` type form above.
+The property is formulated as a class named ``CommandsMustSucceed`` that extends the ``Monitor`` class instantiated with the ``Event`` type form above.
 The method ``require`` takes as argument a Scala partial function, defined with **case** _statements_. The property reads as follows: whenever a 
 ``COMMAND(name, number)`` occurs, we enter a ``hot``state (a non-acceptance state, it is an error to end up in a hot state). Note that the hot state
 is anonymous: it has not name (it is *inlined* so to say). In this state we wait for a ``SUCCESS(`name`, `number`)`` to occur. The quotes around the arguments ``name`` and ``number`` mean that we must match the previously bound values of these variables. However, if a ``FAIL(`name`, `number`)`` event occurs before then an error is reported.
 
-## Example 2 - Commands cannot succeed twice
+## Property P2 - Commands cannot succeed twice
 
-The second requirement is:
+Recall the property:
 
-> *A command number cannot succeed more than once.* 
+**P2.** *A command number cannot succeed more than once.* 
 
 Note that we don't care about the command name.
-This requirement is formulated as follows in TraceContract:
+This property is formulated as follows in TraceContract:
 
 ~~~scala
 class OnlyOneSuccess extends Monitor[Event](Severity.WARNING) {
@@ -88,14 +104,14 @@ The ``Monitor`` class is instantiated with a ``Severity.WARNING``, which indicat
 is ``Severity.ERROR``. These values are in fact objects defining a
 ``level`` variable. ``Severity.ERROR.level`` has value 10 and ``Severity.WARNING.level`` has value 20. The lower the value the more serious the violation. When properties are violated the violations with the lower values are reported before violations with higher values.
 
-## Example 3 - Commands and successes must alternate
+## Property P3 - Commands and successes must alternate
 
-The third requirement is as follows:
+Recall the property:
 
-> *We should see commands be issued one at a time - each command shall 
-> succeed before the next is issued.*
+**P3.** *We should see commands be issued one at a time - each command shall 
+succeed before the next is issued.*
 
-This requirement can be formulated as follows, this time declaring violations
+This property can be formulated as follows, this time declaring violations
 to be of highest importance.
 
 ~~~scala
@@ -118,21 +134,22 @@ class Alternation extends Monitor[Event](SUPERBAD) {
 }
 ~~~
 
-The requirement is defined as a state machine with two states ``S1`` and ``S2``.
+The property is defined as a state machine with two states ``S1`` and ``S2``.
 Each such state is a ``Formula`` (we have to provide this type for the
 program to type check). Each of these two states are defined as ``weak``, which means: the next event has to match one of the transitions, and if not it is an error. However, it is ok if there are no further events. This is in contrast to ``strong`` states, where a next event must occur (similar to *weak next* versus *strong next* in temporal logic).
 
 Observe that state ``S2`` is parameterized with the ``name`` and ``number`` picked up in state ``S1``: the ``SUCCESS`` arguments must match these.
 
-## Example 4 - Double success must be reported
+## Property P4 - Double success must be reported
 
-This example illustrates how longer sequences of events can be expressed. Consider the following requirement:
+Recall the property:
 
-> *If a command is issued, and it subsequently at some later point succeeds,
-> and if it succeeds again a second time immediately thereafter in the next
-> step, **then** in the immediate subsequent step it must fail*
+**P4.** *If a command is issued, and it subsequently at some later point succeeds,
+and if it succeeds again a second time immediately thereafter in the next
+step, then in the immediate subsequent step it must fail.*
 
-This requirement can be stated as follows:
+This property illustrates how longer sequences of events can be expressed.
+and is formalized as follows:
 
 ~~~scala
 class WrongSequence extends Monitor[Event] {
@@ -156,18 +173,16 @@ event is observed, and then some time later a ``SUCCESS(`name`,`number`)``
 event is observed, then if in the next step a ``SUCCESS(`name`,`number`)``
 occurs, **then** in the next step a ``FAIL(`name`,`number`)`` must occur, and if not an error is reported.
 
-## Example 5 - Numbers must increase by 1
+## Property P5 - Numbers must increase by 1
 
-This example illustrates how programming in Scala can be combined with
-temporal properties.
+Recall the property:
 
-Consider the requirement:
+**P5.** *Consecutive command numbers should increase by exactly 1. In addition, 
+collect the names of the commands issued and print them at the end
+of the trace.* 
 
-> *Consecutive command numbers should increase by exactly 1. In addition, 
-> collect the names of the commands issued and print them at the end
-> of the trace.* 
-
-This requirement can be stated as follows:
+This property illustrates how programming in Scala can be combined with
+temporal properties, and is formalized as follows:
 
 ~~~scala
 class IncreasingNumbers extends Monitor[Event] {
@@ -444,27 +459,4 @@ convenient modeling language.
 * URL: https://github.com/havelund/tracecontract
 * [*TraceContract: A Scala DSL for Trace Analysis*](tracecontract-fm-2011.pdf) Howard Barringer and Klaus Havelund, FM'11, Lecture Notes in Computer Science, vol. 6664, 2011. 
 
-## Classification
 
-* Use Table 5 from the STTT-paper (https://link.springer.com/article/10.1007%2Fs10009-017-0454-5) to self-categorize tool.
-
-|U.spec|B.spec|Prop|Par|Aut|Log|Reg|Ord|Time|Ins|AJ |C  |Java|Tra|T.trig|E.trig|
-|:-----:|:---:|:--:|:-:|:-:|:-:|:-:|:-:|:--:|:-:|:-:|:-:|:--:|:-:|:----:|:----:|
-| x     |     | x  | x | x | x |   | x |(x)|   | x |   |  x | x |      |   x  |
-
-* U.spec = User-enabled
-* B.spec = Built-in 
-* Prop = Propositional events
-* Par = Parametric events
-* Aut = Automata-based
-* Log = Logic-based
-* Reg = Regular Expressions-based
-* Ord = Logical-time
-* Time = Real-time
-* Ins = Own instrumentation
-* AJ = Relies on AspectJ
-* C  = C programs
-* Java = Java programs
-* Tra = Traces
-* T.trig = Time triggered 
-* E.trig = Event triggered
