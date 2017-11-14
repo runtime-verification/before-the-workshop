@@ -8,7 +8,7 @@ Consider including the following and introducing additional structure if you wan
 
 * My favourite specification (or two)
 	
-	ARTiMon input langage (kind of MITL with additionnal operators like the Aggregation, Cumulative Length, Last, Generalized Rising/falling edges ...)
+	ARTiMon input langage (a mix of MITL & STL with additionnal operators like the Aggregation, Cumulative Length, Last, Generalized Rising/falling edges, Duration ...)
 	
 	See the paper "ARTiMon Monitoring Tool, The Time Domains" of post-proceedings of RV-CuBES 2017 for more details about the language.
 	
