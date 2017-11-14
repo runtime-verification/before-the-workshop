@@ -26,7 +26,7 @@ Consider including the following and introducing additional structure if you wan
 		
 		(c) the rate of electric power recover
 		
-	Those quantities but be considered not on the overall trace but per cycle. The cycle variable is identified by an integer.
+	Those quantities shall be considered not on the overall trace but per cycle. The cycle variable is identified by an integer.
 	So the monitor must be able to spot cycles starts and ends and to restrict a quantity computation to a cycle.
 	
 	The Files for executing ARTiMon are in the directory SherpaEngineCycles.
