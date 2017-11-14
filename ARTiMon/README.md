@@ -7,6 +7,13 @@
 Consider including the following and introducing additional structure if you want.
 
 * My favourite specification (or two)
+	
+	ARTiMon input langage (kind of MITL with additionnal operators like the Aggregation, Cumulative Length, Last, Generalized Rising/falling edges ...)
+	
+	See the paper "ARTiMon Monitoring Tool, The Time Domains" of post-proceedings of RV-CuBES 2017 for more details about the language.
+	
+	(Some difference with the effective syntax of the tool may exists)
+
 * A short paragraph explaining the property
 
 	The system under monitoring is a vehicule hybrid engine.
