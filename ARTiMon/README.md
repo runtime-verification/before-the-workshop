@@ -13,18 +13,36 @@ Consider including the following and introducing additional structure if you wan
 	
 	The goal is to check/compute three properties about those quantities:
 	
-		* the average consumption 
+		(a) the average consumption 
 		
-		* the max speed
+		(b) the max speed
 		
-		* the rate of electric power recover
+		(c) the rate of electric power recover
 		
 	Those quantities but be considered not on the overall trace but per cycle. The cycle variable is identified by an integer.
 	So the monitor must be able to spot cycles starts and ends and to restrict a quantity computation to a cycle.
 	
+	The Files for executing ARTiMon are in the directory SherpaEngineCycles.
 	
+	The executable has been compiled with Cygwin compiler under Windows 7 for 64 bits. Cygwin' dll may be required to execute properly.
 	
+	The specification file for criterion (c) is cycles.spec. 
 	
+	The file cycles_all_criteria.spec contains all criteria (a), (b), (c)
+	
+	Here ARTiMon is used to compute some function rather than for computing a boolean verdict of a boolean hazard.
+	
+	In order to do that monitored hazards have the form: f & false where f is the non-boolean function specifying the criterion
+
+	For criterion (c) the final term representing this criterion is 'div' (integrale_pe_by_cycle_at_end, 16021800):
+	
+	ARTiMon vedict file (Verdict_full.html) exhibits  this line for this term: 
+	'div' (integrale_pe_by_cycle_at_end, 16021800) with CI [0.1625, 7200.44[ : 
+	[1800.04, 1800.04]^-0.179390314  [3600.14, 3600.14]^-0.193000664  [5400.14, 5400.14]^-0.193001817  [7200.24, 7200.24]^-0.193001841  
+	
+	The values attached to intervals (one for each ends of cycles) are the values computed by ARTiMon for criterion (c)
+	
+	Notice that they are equal to values computed with Excel by end. 
 	
 * Show how to run it (if a tools exists): command line/web-based
 
