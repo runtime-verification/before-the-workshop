@@ -51,7 +51,7 @@ Consider including the following and introducing additional structure if you wan
 	
 	The values attached to intervals (one for each ends of cycles) are the values computed by ARTiMon for criterion (c)
 	
-	Notice that they are equal to values computed with Excel by end. 
+	Notice that they are equal to values computed with Excel by hand. 
 	
 * Show how to run it (if a tools exists): command line/web-based
 
