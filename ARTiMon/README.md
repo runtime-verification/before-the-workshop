@@ -58,6 +58,21 @@ Consider including the following and introducing additional structure if you wan
 	Just Double-Clic on ARTiMon.exe
 	
 * What is your formalism good at/what is missing? Application area?
+
+	ARTiMon can compute boolean verdicts or new streams from observed stream.
+	
+	ARTiMon can run online (and offline), inline (linkable C libraries), in constant memory (if garbage collector is active).
+
+	So ARTiMon is embeddable (actually runs on a beable bone black to monitor Pernoud S.A. Molds)
+	
+	ARTiMon support two semantics (requires two seperate compilations) discrete (pointwise) and continuous (the sampling of variables is interpolated with constants functions).
+
+	ARTiMon (written in C) is easy to use in many environments (Simulink (as an S-Function), FMI components, C programs)...
+	
+	ARTiMon use a special library to handle time (which respect arithmetics axioms). So its implantation is conform to its theory.
+	
+	
+	
 * If possible, use the table from the [STTT-paper](https://link.springer.com/article/10.1007%2Fs10009-017-0454-5) to self-categorize tool
 
 ## References & links
