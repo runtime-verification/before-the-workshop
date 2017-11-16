@@ -1,5 +1,5 @@
 * // signaux
-no_cycle
+cycle_id
 distance
 puissance_elec
 sOC_Elec
@@ -9,11 +9,11 @@ speed
 * // sous_formules
 false = ('bool_cst' 0)
 
-cycle_start = Top0 no_cycle
+cycle_start = Top0 cycle_id
 
 in_cycle = ! cycle_start
 
-cycle_end = Bot no_cycle
+cycle_end = Bot cycle_id
 
 cycle_stable = ! (E[-0.0625,0] cycle_end)
 
@@ -31,7 +31,11 @@ just_before_cycle_end = V[0.0625 ] cycle_end
 	pe_negative_or_null_[2] pe_negative_int puissance_elec
 	pe_negative_or_null =  '*' pe_negative_or_null_
 	
-//	coupure par cycle et complétion à null des instants non définis
+//	coupure par cycle et complétion à DOUBLE_MAX des instants non définis
+//  # applied to a boolean function transforms false into (double) 0 and true into (double) 1
+//  # applied to a non boolean transforms nil into DOUBLE_MAX and is identity either
+//  DOUBLE_MAX resets the 'sum'  aggregation i.e. sum(DOUBLE_MAX,A) = 0 for any aggregate A
+
 	pe_negative_or_null_by_cycle = # (cycle_stable & pe_negative_or_null)
 
 //	surfaces élémentaires 

@@ -33,6 +33,8 @@ Consider including the following and introducing additional structure if you wan
 	
 	The executable has been compiled with Cygwin compiler under Windows 7 for 64 bits. Cygwin' dll may be required to execute properly.
 	
+	The environment variable ARTIMON must be defined (though not used ... so an arbitrary value or path is fine). 
+	
 	The specification file for criterion (c) is cycles.spec. 
 	
 	The file cycles_all_criteria.spec contains all criteria (a), (b), (c)
