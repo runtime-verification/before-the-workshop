@@ -41,7 +41,7 @@ cycle_stable = !  cycle_end
 // intégrale au moment de la fin de cycle
 
   
-integ_sur_cbat_vec[2] integrale_pe_by_cycle ('double_cst' 16021800)
+integ_sur_cbat_vec[2] integrale_pe_by_cycle ('double_cst' 160218000)
 
 
 *
