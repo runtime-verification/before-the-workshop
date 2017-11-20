@@ -51,7 +51,15 @@ Consider including the following and introducing additional structure if you wan
 	
 	The values attached to intervals (one for each ends of cycles) are the values computed by ARTiMon for criterion (c)
 	
-	Notice that they are equal to values computed with Excel by hand. 
+	Notice that they are equal to values computed with Excel by hand.
+	
+	As in this example we deal with a constant step trace, the formalization of criterion (c)
+	
+	can be drastically simplified. Instead of computing an integrale using LI operator, one can only compute a sum.
+	
+	This formalization is given in the file cycles_crit_c_cst_step.spec
+	
+	(To test it, subsitute cycle.spec by cycles_crit_c_cst_step.spec in artimon.conf)
 	
 * Show how to run it (if a tools exists): command line/web-based
 
