@@ -1,0 +1,57 @@
+\documentclass{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{cite}
+
+%opening
+\title{Data Quantification in\\ Temporal Specification Languages}
+\author{Domenico Bianculli, Giles Reger, Dmitriy Traytel}
+
+\begin{document}
+
+\maketitle
+
+In this working group, we tried to collect and characterize the different kinds of quantification that can be encountered in temporal specification languages used in the runtime verification community. 
+
+\paragraph{Standard First-Order Quantification}
+
+FOLTL~\cite{Emerson90} MFOTL~\cite{Chomicki95,BasinKMZ15}
+
+\paragraph{Quantification over the Active Domain}
+
+What is the active domain in a trace?
+
+\emph{all seen values}
+
+database community LTL-FO~\cite{DeutschSVZ06}
+
+\emph{all previously seen values}
+
+\emph{values at current time-point}
+
+LTL$^\text{FO}$~\cite{BauerKV15}
+
+LTL-FO$^+$~\cite{HalleV08}
+
+Parametrized LTL~\cite{Stolz10}
+
+LTL$_4$-C~\cite{MedhatBFJ16}
+
+\paragraph{Freeze Quantification}
+
+\cite{BasinKZ17}
+
+\paragraph{Templates and Parametric Trace Slicing}
+
+LOLA~\cite{FaymonvilleFST16}
+
+Parametric Trace Slicing~\cite{ChenR09,RegerR15}
+
+QEA~\cite{BarringerFHRR12}
+
+\bibliographystyle{abbrv}
+\bibliography{quant}
+
+\end{document}
