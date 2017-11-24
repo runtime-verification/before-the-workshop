@@ -13,17 +13,18 @@
 
 \maketitle
 
-In this working group, we tried to collect and characterize the different kinds of quantification that can be encountered in temporal specification languages used in the runtime verification community. 
+In this working group, we tried to collect and characterize the different kinds of quantification or parametrization that can be encountered in temporal specification languages used in the runtime verification community.
+Our selection, albeit far from being comprehensive, shows that the main semantic difference is the domain of quantification. We have identified four different groups.
 
 \paragraph{Standard First-Order Quantification}
 
-FOLTL~\cite{Emerson90} MFOTL~\cite{Chomicki95,BasinKMZ15}
+An early approach taken by Emerson's first-order linear temporal logic (FOLTL)~\cite{Emerson90} is to add standard first-order logic quantifiers to LTL. Thereby, the quantifiers range over a fixed domain, which is independent of the trace (sequence of structures). Chomicki's real-time extension of FOLTL, called metric first-order temporal logic (MFOTL)~\cite{Chomicki95} follows this approach. The MonPoly monitoring tool~\cite{BasinKMZ15} demonstrates how such quantifiers can be handled algorithmically. 
 
 \paragraph{Quantification over the Active Domain}
 
 What is the active domain in a trace?
 
-\emph{all seen values}
+\emph{all values that occur (or will occur) in the stream}
 
 database community LTL-FO~\cite{DeutschSVZ06}
 
@@ -40,6 +41,8 @@ Parametrized LTL~\cite{Stolz10}
 LTL$_4$-C~\cite{MedhatBFJ16}
 
 \paragraph{Freeze Quantification}
+
+not to be confused with TPTL 
 
 \cite{BasinKZ17}
 
