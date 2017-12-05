@@ -4,6 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{cite}
+\usepackage[numbers, sort&compress]{natbib}
 
 %opening
 \title{Data Quantification in\\ Temporal Specification Languages}
@@ -50,11 +51,12 @@ More recently, the stream-based specification language LOLA~\cite{FaymonvilleFST
 
 \paragraph{Quantitative Quantifiers}
 
-Finally, some data quantifiers in addition to binding a variable also perform some arithmetic operation (be it filtering, grouping, or aggregation) on the quantified values.
+Finally, some data quantifiers in addition to binding a variable also perform an arithmetic operation (be it filtering, grouping, or aggregation) on the quantified values (be them data or the number of satisfied instances).
 Example languages in this space are
 LTL$^{\text{FO}}$ extended with counting quantifiers~\cite{BauerGT09},
-LTL$_4$-C~\cite{MedhatBFJ16} with its probabilistic quantifiers, and the extension of MFOTL with aggregations~\cite{BasinKMZ15}.
+LTL$_4$-C~\cite{MedhatBFJ16} with its probabilistic quantifiers, and the extension of MFOTL with aggregations~\cite{BasinKMaZ15}.
 
+\setlength{\bibsep}{5pt plus .5pt minus .25pt}
 \bibliographystyle{abbrv}
 \bibliography{quant}
 
