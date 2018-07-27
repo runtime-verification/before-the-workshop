@@ -1,0 +1,63 @@
+\documentclass{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{cite}
+\usepackage[numbers, sort&compress]{natbib}
+
+%opening
+\title{Data Quantification in\\ Temporal Specification Languages}
+\author{Domenico Bianculli, Giles Reger, Dmitriy Traytel}
+
+\hyphenation{pa-ram-e-tri-za-tion}
+
+\begin{document}
+
+\maketitle
+
+In this working group, we tried to collect and characterize the different kinds of quantification or parametrization that can be encountered in temporal specification languages used in the runtime verification community.
+Our selection, albeit far from being comprehensive, shows that the main semantic difference is the domain of quantification. We have identified five different groups.
+
+\paragraph{Standard First-Order Quantification}
+
+An early approach taken by Emerson's first-order linear temporal logic (FOLTL)~\cite{Emerson90} is to add standard first-order logic quantifiers to LTL. Thereby, the quantifiers range over a fixed domain, which is independent of the trace (sequence of structures). Chomicki's real-time extension of FOLTL, called metric first-order temporal logic (MFOTL)~\cite{Chomicki95} follows this approach. The MonPoly monitoring tool~\cite{BasinKMZ15} demonstrates how such quantifiers can be handled algorithmically. 
+
+\paragraph{Quantification over the Active Domain}
+
+A different approach, inspired by the database community, is to quantify over the active domain, i.e., values that occur in the trace, rather than a fixed, separately given domain. For certain classes of properties, e.g., where all quantifiers are bounded by atomic propositions as in $\forall x. p(x) \rightarrow \phi$ or $\exists x. p(x) \land \phi$, active domain quantification coincides with the standard first-order quantification.
+
+Several specification languages favor the active domain quantification, as it appears to be algorithmically more tractable. They differ in their definition of what the \emph{active domain} in a trace is.
+%
+The traditional database definition as \emph{all values contained in the trace},
+used in LTL-FO~\cite{DeutschSVZ06}, is hard to realize in the online setting,
+where the trace is an infinite stream of events. An adaptation of the active
+domain to \emph{all previously seen values} would fit this setting better. However, the most widespread interpretation is to restrict the quantification to \emph{values seen at the current time-point}. For example, the languages LTL$^\text{FO}$~\cite{BauerKV15},
+LTL-FO$^+$~\cite{HalleV08}, and
+Parametrized LTL~\cite{Stolz10}
+use this semantics.
+
+\paragraph{Freeze Quantification}
+
+Freeze quantification is a further refinement of the quantification over the current time-point approach. The usage of registers restricts the quantification to be a singleton: the only value that populates the register at a given time-point.
+Timed propositional temporal logic (TPTL)~\cite{AlurH94} uses such quantifiers to extend LTL with real-time constraints. Here, we are interested in quantification over the data dimension rather than the time dimension, as used in Freeze~LTL~\cite{DemriLN07} and its extensions~\cite{DeckerT16}. A recent extension of MTL with freeze quantification over data MTL$^\downarrow$~\cite{BasinKZ17} was used as the specification language when online monitoring our-of-order traces.
+
+\paragraph{Templates and Parametric Trace Slicing}
+
+Some approaches avoid explicit quantification in their formalisms. Yet, they allow parametric specifications, which are handled by decomposing traces containing data into propositional ones. This approach is known as parametric trace slicing~\cite{ChenR09,RegerR15}, which is at the core of the JavaMOP system~\cite{MeredithJGCR12} and in quantified event automata 
+QEA~\cite{BarringerFHRR12}.
+
+More recently, the stream-based specification language LOLA~\cite{FaymonvilleFST16} introduced parametrization in terms of template specifications. Semantically, templates behave similarly to parametric trace slicing, but the precise connections are yet to be explored.
+
+\paragraph{Quantitative Quantifiers}
+
+Finally, some data quantifiers in addition to binding a variable also perform an arithmetic operation (be it filtering, grouping, or aggregation) on the quantified values (be them data or the number of satisfied instances).
+Example languages in this space are
+LTL$^{\text{FO}}$ extended with counting quantifiers~\cite{BauerGT09},
+LTL$_4$-C~\cite{MedhatBFJ16} with its probabilistic quantifiers, and the extension of MFOTL with aggregations~\cite{BasinKMaZ15}.
+
+\setlength{\bibsep}{5pt plus .5pt minus .25pt}
+\bibliographystyle{abbrv}
+\bibliography{quant}
+
+\end{document}
