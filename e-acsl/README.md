@@ -6,7 +6,7 @@
   (derived from ACSL designed by Patrick Baudin, Pascal Cuoq,
    Jean-Christophe Filliâtre, Claude Marché, Benjamin Monate, Yannick Moy, 
    and Virgile Prevosto)
-* tool (Frama-C plug-in E-ACSL): Julien Signoles and Kostyantyn Vorobyov
+* tool (Frama-C plug-in E-ACSL): Julien Signoles (with important contributions from Kostyantyn Vorobyov and Fonenantsoa Maurica)
 
 ## Description
 
